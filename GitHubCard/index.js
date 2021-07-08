@@ -1,20 +1,21 @@
+import axios from "axios";
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
 /*
-  STEP 2: Inspect and study the data coming back, this is YOUR
-    github info! You will need to understand the structure of this
-    data in order to use it to build your component function
+STEP 2: Inspect and study the data coming back, this is YOUR
+github info! You will need to understand the structure of this
+data in order to use it to build your component function
 
-    Skip to STEP 3.
+Skip to STEP 3.
 */
 
 /*
-  STEP 4: Pass the data received from Github into your function,
-    and append the returned markup to the DOM as a child of .cards
+STEP 4: Pass the data received from Github into your function,
+and append the returned markup to the DOM as a child of .cards
 */
 
 /*
@@ -49,6 +50,59 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const cards = document.querySelector(".cards");
+axios
+  .get(`https://api.github.com/users/SelfCheckout94`)
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => console.log("nice"));
+
+function gitHub(obj) {
+  const card = document.createElement("div");
+  const imgURL = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const name = document.createElement("h3");
+  const username = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const url = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  name.classList.add("name");
+  username.classList.add("username");
+
+  imgURL.src = `${obj.avatar_url}`;
+  name.textContent = `${obj.name}`;
+  username.textContent = `${obj.login}`;
+  location.textContent = `Location: ${obj.location}`;
+  url.href = `${obj.url}`;
+  profile.textContent = `Profile: ${obj.url}`;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.bio}`;
+
+  card.appendChild(imgURL);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(url);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
+
+cards.appendChild(gitHub(gitHubData));
 
 /*
   List of LS Instructors Github username's:
