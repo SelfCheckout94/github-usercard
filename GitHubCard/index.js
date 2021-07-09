@@ -1,114 +1,82 @@
 import axios from "axios";
 
-/*
-  STEP 1: using axios, send a GET request to the following URL
-    (replacing the placeholder with your Github name):
-    https://api.github.com/users/<your name>
-*/
-/*
-STEP 2: Inspect and study the data coming back, this is YOUR
-github info! You will need to understand the structure of this
-data in order to use it to build your component function
-
-Skip to STEP 3.
-*/
-
-/*
-STEP 4: Pass the data received from Github into your function,
-and append the returned markup to the DOM as a child of .cards
-*/
-
-/*
-  STEP 5: Now that you have your own card getting added to the DOM, either
-    follow this link in your browser https://api.github.com/users/<Your github name>/followers,
-    manually find some other users' github handles, or use the list found at the
-    bottom of the page. Get at least 5 different Github usernames and add them as
-    Individual strings to the friendsArray below.
-
-    Using that array, iterate over it, requesting data for each user, creating a new card for each
-    user, and adding that card to the DOM.
-*/
-
-const followersArray = [];
-
-/*
-  STEP 3: Create a function that accepts a single object as its only argument.
-    Using DOM methods and properties, create and return the following markup:
-
-    <div class="card">
-      <img src={image url of user} />
-      <div class="card-info">
-        <h3 class="name">{users name}</h3>
-        <p class="username">{users user name}</p>
-        <p>Location: {users location}</p>
-        <p>Profile:
-          <a href={address to users github page}>{address to users github page}</a>
-        </p>
-        <p>Followers: {users followers count}</p>
-        <p>Following: {users following count}</p>
-        <p>Bio: {users bio}</p>
-      </div>
-    </div>
-*/
+const followersArray = [
+  "rkshockey",
+  "BrandonWorobi",
+  "ShariqAli-Dev",
+  "Jie-chelchel",
+  "JamariaSims",
+];
 
 const cards = document.querySelector(".cards");
+
+// my card
 axios
   .get(`https://api.github.com/users/SelfCheckout94`)
   .then((res) => {
-    console.log(res);
+    cards.appendChild(gitHub(res.data));
   })
   .catch((err) => console.log(err))
   .finally(() => console.log("nice"));
 
-function gitHub(obj) {
+// followers cards
+followersArray.forEach((user) =>
+  axios
+    .get(`https://api.github.com/users/${user}`)
+    .then((res) => {
+      cards.appendChild(gitHub(res.data));
+    })
+    .catch((err) => console.log(err))
+    .finally(() => console.log("nice"))
+);
+
+function gitHub({
+  avatar_url,
+  name,
+  login,
+  location,
+  html_url,
+  followers,
+  following,
+  bio,
+}) {
   const card = document.createElement("div");
   const imgURL = document.createElement("img");
   const cardInfo = document.createElement("div");
-  const name = document.createElement("h3");
+  const realName = document.createElement("h3");
   const username = document.createElement("p");
-  const location = document.createElement("p");
+  const locale = document.createElement("p");
   const profile = document.createElement("p");
   const url = document.createElement("a");
-  const followers = document.createElement("p");
-  const following = document.createElement("p");
-  const bio = document.createElement("p");
+  const userFollowers = document.createElement("p");
+  const userFollowing = document.createElement("p");
+  const userBio = document.createElement("p");
 
   card.classList.add("card");
   cardInfo.classList.add("card-info");
-  name.classList.add("name");
+  realName.classList.add("name");
   username.classList.add("username");
 
-  imgURL.src = `${obj.avatar_url}`;
-  name.textContent = `${obj.name}`;
-  username.textContent = `${obj.login}`;
-  location.textContent = `Location: ${obj.location}`;
-  url.href = `${obj.url}`;
-  profile.textContent = `Profile: ${obj.url}`;
-  followers.textContent = `Followers: ${obj.followers}`;
-  following.textContent = `Following: ${obj.following}`;
-  bio.textContent = `Bio: ${obj.bio}`;
+  imgURL.src = `${avatar_url}`;
+  realName.textContent = `${name}`;
+  username.textContent = `${login}`;
+  locale.textContent = `Location: ${location}`;
+  url.href = `${html_url}`;
+  profile.textContent = `Profile: ${url}`;
+  userFollowers.textContent = `Followers: ${followers}`;
+  userFollowing.textContent = `Following: ${following}`;
+  userBio.textContent = `Bio: ${bio}`;
 
   card.appendChild(imgURL);
   card.appendChild(cardInfo);
-  cardInfo.appendChild(name);
+  cardInfo.appendChild(realName);
   cardInfo.appendChild(username);
-  cardInfo.appendChild(location);
+  cardInfo.appendChild(locale);
   cardInfo.appendChild(profile);
   profile.appendChild(url);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
+  cardInfo.appendChild(userFollowers);
+  cardInfo.appendChild(userFollowing);
+  cardInfo.appendChild(userBio);
 
   return card;
 }
-
-cards.appendChild(gitHub(gitHubData));
-
-/*
-  List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
-*/
